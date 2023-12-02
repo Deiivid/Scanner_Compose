@@ -48,6 +48,7 @@ fun ScannerScreen(
         onResult = { result ->
 
             val scanResult = result.data?.getStringExtra("SCAN_RESULT")
+
             navController.navigate(Routes.DetailScreen.createRoute(scanResult!!))
             Toast.makeText(context, scanResult ?: "No se encontró resultado", Toast.LENGTH_SHORT)
                 .show()
