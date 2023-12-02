@@ -36,6 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.navigation.compose.rememberNavController
+import com.example.scanner_compose.navigation.navigationgraph.MainNavGraph
 import com.example.scanner_compose.ui.theme.Scanner_ComposeTheme
 import com.google.zxing.integration.android.IntentIntegrator
 import com.journeyapps.barcodescanner.CaptureActivity
@@ -45,95 +47,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Scanner_ComposeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting()
-                }
+                val navController = rememberNavController()
+                MainNavGraph(navController)
             }
         }
     }
 }
 
-@Composable
-fun Greeting() {
-    val context = LocalContext.current
-    val scannerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = { result ->
-            val scanResult = result.data?.getStringExtra("SCAN_RESULT")
-            Toast.makeText(context, scanResult ?: "No se encontró resultado", Toast.LENGTH_SHORT)
-                .show()
-        }
-    )
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            if (isGranted) {
-                scannerLauncher.launch(Intent(context, CaptureActivity::class.java))
-            } else {
-            }
-        }
-    )
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Status Icon",
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-
-                Text(
-                    text = "APP PRUEBA",
-                    color = Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp),
-                onClick = {
-                    when (PackageManager.PERMISSION_GRANTED) {
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.CAMERA
-                        ) -> {
-                            scannerLauncher.launch(Intent(context, CaptureActivity::class.java))
-                        }
-
-                        else -> {
-                            permissionLauncher.launch(Manifest.permission.CAMERA)
-                        }
-                    }
-                }) {
-                Text("Escanear Código QR")
-            }
-        }
-    }
-}
 
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun DefaultPreview() {
     Scanner_ComposeTheme {
-        Greeting()
+
     }
 }
