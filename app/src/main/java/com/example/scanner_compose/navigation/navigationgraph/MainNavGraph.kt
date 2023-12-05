@@ -23,7 +23,7 @@ fun SetupNavGraph(navController: NavHostController) {
         composable(Routes.DetailScreen.route) { backStackEntry ->
             val character = backStackEntry.arguments?.getString("qr")
             character?.let {
-                DetailScreen(qr = it)
+                DetailScreen(navController = navController,qr = it)
             }
         }
     }

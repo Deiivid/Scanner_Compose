@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,29 +19,37 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.Text
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.example.scanner_compose.navigation.routes.Routes
 import es.clean.architecture.R
 
 @Composable
 fun DetailScreen(
+    navController: NavHostController,
     qr: String
 ) {
     val context = LocalContext.current
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.CenterHorizontally)
-                .background(Color.White),
+                .padding(top = 16.dp)
+                .align(Alignment.CenterHorizontally),
             horizontalArrangement = Arrangement.Center
         ) {
-
             Text(
                 text = qr,
                 fontSize = 20.sp,
@@ -49,23 +58,40 @@ fun DetailScreen(
                 textAlign = TextAlign.Center,
                 color = Color.Black
             )
+        }
 
-                when (qr) {
-                    "Success" -> {
-                        LottieSuccess()
-                    }
 
-                    "Error" -> {
-                        LottieError()
-                    }
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) {
+            when (qr) {
+                "Success" -> {
+                    LottieSuccess()
+                }
 
-                    else -> {
-                        Toast.makeText(context, "No hay nada que mostrar", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                "Error" -> {
+                    LottieError()
+                }
+
+                else -> {
+                    Toast.makeText(context, "No hay nada que mostrar", Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }
+
+        Button(
+            onClick = { navController.navigate(Routes.QrScreen.route) },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 16.dp)
+        ) {
+            Text(text = "Volver a Scanear", textAlign = TextAlign.Center)
+        }
+    }
 }
 
 
@@ -96,5 +122,5 @@ fun LottieError() {
 @Preview
 @Composable
 fun showDetailScreen() {
-    DetailScreen(qr = "Success")
+    DetailScreen(rememberNavController(),qr = "Success")
 }
