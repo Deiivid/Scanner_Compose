@@ -1,7 +1,6 @@
 package com.example.scanner_compose
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -86,10 +85,17 @@ fun DetailScreen(
         Button(
             onClick = { navController.navigate(Routes.QrScreen.route) },
             modifier = Modifier
+                .fillMaxWidth() // Esto hará que el botón se expanda para ocupar el ancho máximo disponible
                 .align(Alignment.CenterHorizontally)
-                .padding(bottom = 16.dp)
+                .padding(10.dp,0.dp,10.dp,16.dp)
         ) {
-            Text(text = "Volver a Scanear", textAlign = TextAlign.Center)
+            Text(
+                text = "Volver a Scanear",
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterVertically)
+            )
         }
     }
 }
@@ -122,5 +128,5 @@ fun LottieError() {
 @Preview
 @Composable
 fun showDetailScreen() {
-    DetailScreen(rememberNavController(),qr = "Success")
+    DetailScreen(rememberNavController(), qr = "Success")
 }
